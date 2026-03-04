@@ -210,11 +210,14 @@ export default function Home() {
 
         /* HERO */
         .hero { min-height: 100vh; position: relative; display: flex; align-items: center; overflow: hidden; }
-        .hero-bg { position: absolute; inset: 0; background-image: url(${HERO_BG}); background-size: 120%; background-position: center; animation: kenBurns 20s ease-in-out infinite alternate; }
+        .hero-bg { position: absolute; inset: 0; background-image: url(${HERO_BG}); background-size: cover; background-position: center; background-repeat: no-repeat; animation: kenBurns 20s ease-in-out infinite alternate; }
         @keyframes kenBurns {
           0%   { background-size: 110%; background-position: 55% 45%; }
           50%  { background-size: 125%; background-position: 45% 55%; }
           100% { background-size: 115%; background-position: 50% 48%; }
+        }
+        @media (max-width: 768px) {
+          .hero-bg { background-size: cover; background-position: center center; animation: none; }
         }
         .hero-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.5) 50%, rgba(10,10,10,0.7) 100%); }
         /* Floating particles */
