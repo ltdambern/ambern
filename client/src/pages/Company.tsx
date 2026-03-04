@@ -3,7 +3,7 @@
  * Design Philosophy: Dark Intelligence / Corporate Power
  * Colors: #0A0A0A (bg), #E8650A (orange accent), #FFFFFF (text), #1A1A1A (cards)
  * Typography: Space Grotesk (headings) + Inter (body)
- * Tabs: Affiliate Kit | W-8BEN-E Guide
+ * Tabs: Affiliate Kit | W-8BEN-E Guide | Network Checklist
  */
 
 import { useState } from "react";
@@ -134,6 +134,128 @@ const sections = [
   },
 ];
 
+// ─── Network Checklist data ────────────────────────────────────────────────
+type CheckStatus = "done" | "pending" | "na";
+interface CheckItem { item: string; status: CheckStatus; note?: string; }
+interface NetworkEntry { id: string; name: string; tier: string; tierColor: string; vertical: string; commission: string; applyUrl: string; applyLabel: string; items: CheckItem[]; }
+
+const networks: NetworkEntry[] = [
+  {
+    id: "nordvpn",
+    name: "NordVPN",
+    tier: "Direct Programme",
+    tierColor: "#3b82f6",
+    vertical: "Cybersecurity · VPN",
+    commission: "Up to 100% first month + 30% recurring",
+    applyUrl: "https://nordvpn.com/affiliate/",
+    applyLabel: "Apply at nordvpn.com",
+    items: [
+      { item: "Professional website with clear traffic description", status: "done", note: "ambern.uk — live and indexed" },
+      { item: "Business email (not Gmail)", status: "done", note: "partnerships@ambern.uk" },
+      { item: "Privacy Policy page", status: "done", note: "ambern.uk/privacy-policy" },
+      { item: "Select PPC as traffic method in application", status: "pending", note: "Choose 'Paid Search / PPC' in the form" },
+      { item: "Describe traffic: Google Ads + Facebook Ads, US/UK markets", status: "pending", note: "Copy from Affiliate Kit > Traffic Methods" },
+      { item: "No coupon/incentive traffic declaration", status: "pending", note: "Tick the confirmation box in the form" },
+      { item: "Custom domain connected", status: "done", note: "ambern.uk active" },
+    ],
+  },
+  {
+    id: "shareasale",
+    name: "ShareASale",
+    tier: "Affiliate Network",
+    tierColor: "#10b981",
+    vertical: "Multi-vertical (Finance, SaaS, Health)",
+    commission: "Varies by merchant — avg. 8–20%",
+    applyUrl: "https://www.shareasale.com/shareasale.cfm",
+    applyLabel: "Apply at shareasale.com",
+    items: [
+      { item: "Website URL (must be live and indexed)", status: "done", note: "ambern.uk" },
+      { item: "Website description (2–3 sentences)", status: "done", note: "Copy from Affiliate Kit > Traffic Methods > Promotion Method (full)" },
+      { item: "Primary promotion method selected", status: "pending", note: "Select 'Pay Per Click' in the application" },
+      { item: "W-8BEN-E tax form submitted", status: "pending", note: "Upload PDF during registration — see W-8BEN-E tab" },
+      { item: "Payment method configured (PayPal or bank)", status: "pending", note: "Add bank details from Banking section" },
+      { item: "Privacy Policy URL provided", status: "done", note: "ambern.uk/privacy-policy" },
+      { item: "Account approved (manual review ~24–48h)", status: "pending", note: "ShareASale manually reviews all new accounts" },
+    ],
+  },
+  {
+    id: "maxbounty",
+    name: "MaxBounty",
+    tier: "CPA Network",
+    tierColor: "#f59e0b",
+    vertical: "Finance, Insurance, Lead Gen",
+    commission: "$50–$200+ per lead (CPA)",
+    applyUrl: "https://www.maxbounty.com/apply.cfm",
+    applyLabel: "Apply at maxbounty.com",
+    items: [
+      { item: "Website URL with clear affiliate marketing content", status: "done", note: "ambern.uk" },
+      { item: "Phone number (MaxBounty calls to verify)", status: "pending", note: "Add your phone number — they call within 24–48h" },
+      { item: "Describe traffic sources in detail", status: "pending", note: "Copy: 'Google Search Ads and Facebook Ads targeting US/UK adults 35–65 in finance and insurance verticals'" },
+      { item: "Describe top 3 verticals you plan to promote", status: "pending", note: "Finance (Gold IRA), Insurance, Cybersecurity (VPN)" },
+      { item: "Monthly ad spend range", status: "pending", note: "Enter: $2,000–$10,000 USD" },
+      { item: "W-8BEN-E sent to accounting@maxbounty.com", status: "pending", note: "Email after account approval — see W-8BEN-E tab" },
+      { item: "Skype ID provided (MaxBounty uses Skype for AM contact)", status: "pending", note: "Create a Skype account if you don't have one" },
+    ],
+  },
+  {
+    id: "impact",
+    name: "Impact.com",
+    tier: "Affiliate Network",
+    tierColor: "#8b5cf6",
+    vertical: "SaaS, Finance, E-commerce",
+    commission: "Varies — avg. 15–30% recurring (SaaS)",
+    applyUrl: "https://app.impact.com/signup/publisher",
+    applyLabel: "Apply at impact.com",
+    items: [
+      { item: "Website URL", status: "done", note: "ambern.uk" },
+      { item: "Business description and promotion methods", status: "done", note: "Copy from Affiliate Kit > Traffic Methods" },
+      { item: "Select 'Paid Search' and 'Paid Social' as channels", status: "pending", note: "Multi-select in the application form" },
+      { item: "Monthly traffic estimate", status: "pending", note: "Enter: 5,000–20,000 monthly visitors (estimated)" },
+      { item: "W-8BEN-E completed in Impact's online wizard", status: "pending", note: "Impact has an online form — select 'Non-US Entity', fill as shown in W-8BEN-E tab" },
+      { item: "Case study or campaign example provided", status: "done", note: "ambern.uk/case-studies — link in application" },
+      { item: "Payment details added (bank or PayPal)", status: "pending", note: "Add UK bank details from Banking section" },
+    ],
+  },
+  {
+    id: "awin",
+    name: "Awin",
+    tier: "Affiliate Network",
+    tierColor: "#ec4899",
+    vertical: "Finance, Retail, Travel",
+    commission: "Varies — avg. 5–15%",
+    applyUrl: "https://www.awin.com/gb/publishers",
+    applyLabel: "Apply at awin.com",
+    items: [
+      { item: "£5 registration deposit (refunded on first payment)", status: "pending", note: "One-time fee — refunded when you reach first payout" },
+      { item: "Website URL", status: "done", note: "ambern.uk" },
+      { item: "Website description and audience", status: "done", note: "Copy from Affiliate Kit > Traffic Methods" },
+      { item: "Primary promotion method: PPC", status: "pending", note: "Select 'PPC / Paid Search' in the application" },
+      { item: "Privacy Policy URL", status: "done", note: "ambern.uk/privacy-policy" },
+      { item: "Tax information submitted", status: "pending", note: "Upload W-8BEN-E PDF — see W-8BEN-E tab" },
+      { item: "Account approved (Awin reviews manually, ~3–5 days)", status: "pending", note: "Awin is stricter — ensure website looks professional" },
+    ],
+  },
+  {
+    id: "cj",
+    name: "CJ Affiliate",
+    tier: "Affiliate Network",
+    tierColor: "#14b8a6",
+    vertical: "Finance, SaaS, Retail",
+    commission: "Varies — avg. 5–25%",
+    applyUrl: "https://signup.cj.com/member/signup/publisher",
+    applyLabel: "Apply at cj.com",
+    items: [
+      { item: "Website URL", status: "done", note: "ambern.uk" },
+      { item: "Website description", status: "done", note: "Copy from Affiliate Kit > Traffic Methods" },
+      { item: "Primary traffic method: Paid Search", status: "pending", note: "Select 'Paid Search' in the application" },
+      { item: "W-8BEN-E completed online (CJ has an online form)", status: "pending", note: "Go to Account > Tax Forms after registration — see W-8BEN-E tab" },
+      { item: "Monthly unique visitors estimate", status: "pending", note: "Enter: 5,000–20,000 (estimated)" },
+      { item: "Payment method: direct deposit or check", status: "pending", note: "Add UK bank details or PayPal" },
+      { item: "Account activated (CJ auto-approves most accounts)", status: "pending", note: "Usually instant — then apply to individual programmes" },
+    ],
+  },
+];
+
 // ─── W-8BEN-E fields ────────────────────────────────────────────────────────
 const w8Groups = [
   {
@@ -203,6 +325,68 @@ const w8Groups = [
     ],
   },
 ];
+
+// ─── Network Checklist components ──────────────────────────────────────────
+const statusConfig: Record<CheckStatus, { label: string; color: string; bg: string; icon: string }> = {
+  done:    { label: "Done",    color: "#4ade80", bg: "rgba(74,222,128,0.1)",  icon: "✓" },
+  pending: { label: "To Do",   color: "#fbbf24", bg: "rgba(251,191,36,0.1)",  icon: "○" },
+  na:      { label: "N/A",     color: "rgba(255,255,255,0.3)", bg: "rgba(255,255,255,0.05)", icon: "—" },
+};
+
+function NetworkCard({ net }: { net: NetworkEntry }) {
+  const [open, setOpen] = useState(false);
+  const done = net.items.filter(i => i.status === "done").length;
+  const total = net.items.filter(i => i.status !== "na").length;
+  const pct = Math.round((done / total) * 100);
+
+  return (
+    <div className="net-card">
+      <button className="net-card-header" onClick={() => setOpen(!open)}>
+        <div className="net-card-left">
+          <div className="net-card-name">{net.name}</div>
+          <div className="net-card-meta">
+            <span className="net-tier" style={{ color: net.tierColor }}>{net.tier}</span>
+            <span className="net-vertical">{net.vertical}</span>
+          </div>
+          <div className="net-commission">Commission: {net.commission}</div>
+        </div>
+        <div className="net-card-right">
+          <div className="net-progress-wrap">
+            <div className="net-progress-bar">
+              <div className="net-progress-fill" style={{ width: `${pct}%`, background: pct === 100 ? "#4ade80" : net.tierColor }} />
+            </div>
+            <div className="net-progress-label" style={{ color: pct === 100 ? "#4ade80" : net.tierColor }}>{done}/{total} ready</div>
+          </div>
+          <div className={`kit-section-chevron${open ? " kit-section-chevron--open" : ""}`}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9" /></svg>
+          </div>
+        </div>
+      </button>
+      {open && (
+        <div className="net-card-body">
+          <a href={net.applyUrl} target="_blank" rel="noopener noreferrer" className="net-apply-btn" style={{ borderColor: net.tierColor, color: net.tierColor }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            {net.applyLabel}
+          </a>
+          <div className="net-checklist">
+            {net.items.map((item, i) => {
+              const cfg = statusConfig[item.status];
+              return (
+                <div key={i} className="net-check-item">
+                  <span className="net-check-status" style={{ color: cfg.color, background: cfg.bg }}>{cfg.icon}</span>
+                  <div className="net-check-content">
+                    <div className="net-check-label" style={{ color: item.status === "done" ? "rgba(255,255,255,0.5)" : "#fff", textDecoration: item.status === "done" ? "line-through" : "none" }}>{item.item}</div>
+                    {item.note && <div className="net-check-note">{item.note}</div>}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 // ─── Copy field ─────────────────────────────────────────────────────────────
 function CopyField({ label, value, line }: { label: string; value: string; line?: string }) {
@@ -348,7 +532,7 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
 // ─── Main Page ──────────────────────────────────────────────────────────────
 export default function Company() {
   const [unlocked, setUnlocked] = useState(false);
-  const [activeTab, setActiveTab] = useState<"kit" | "w8">("kit");
+  const [activeTab, setActiveTab] = useState<"kit" | "w8" | "checklist">("kit");
 
   return (
     <div className="ambern-root">
@@ -397,6 +581,34 @@ export default function Company() {
         .page-hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(28px, 4vw, 48px); font-weight: 800; letter-spacing: -2px; line-height: 1.1; margin-bottom: 12px; }
         .page-hero h1 span { color: #E8650A; }
         .page-hero-sub { font-size: 15px; color: rgba(255,255,255,0.5); max-width: 600px; line-height: 1.7; margin-bottom: 36px; }
+
+        /* NETWORK CHECKLIST */
+        .net-card { background: #111; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+        .net-card-header { width: 100%; background: none; border: none; cursor: pointer; padding: 22px 26px; display: flex; align-items: center; justify-content: space-between; text-align: left; transition: background 0.2s; }
+        .net-card-header:hover { background: rgba(255,255,255,0.03); }
+        .net-card-left { flex: 1; }
+        .net-card-name { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+        .net-card-meta { display: flex; gap: 12px; align-items: center; margin-bottom: 4px; flex-wrap: wrap; }
+        .net-tier { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+        .net-vertical { font-size: 12px; color: rgba(255,255,255,0.35); }
+        .net-commission { font-size: 12px; color: rgba(255,255,255,0.4); }
+        .net-card-right { display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
+        .net-progress-wrap { text-align: right; }
+        .net-progress-bar { width: 100px; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin-bottom: 6px; }
+        .net-progress-fill { height: 100%; border-radius: 2px; transition: width 0.4s; }
+        .net-progress-label { font-size: 11px; font-weight: 700; }
+        .net-card-body { padding: 0 26px 24px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; }
+        .net-apply-btn { display: inline-flex; align-items: center; gap: 7px; border: 1px solid; border-radius: 5px; padding: 8px 16px; font-size: 12px; font-weight: 700; text-decoration: none; margin-bottom: 20px; transition: all 0.2s; letter-spacing: 0.3px; background: transparent; }
+        .net-apply-btn:hover { opacity: 0.75; }
+        .net-checklist { display: flex; flex-direction: column; gap: 10px; }
+        .net-check-item { display: flex; gap: 12px; align-items: flex-start; }
+        .net-check-status { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+        .net-check-content { flex: 1; }
+        .net-check-label { font-size: 14px; font-weight: 500; line-height: 1.4; margin-bottom: 3px; }
+        .net-check-note { font-size: 12px; color: rgba(255,255,255,0.35); line-height: 1.4; }
+        .checklist-legend { display: flex; gap: 20px; margin-bottom: 24px; flex-wrap: wrap; }
+        .legend-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: rgba(255,255,255,0.5); }
+        .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
 
         /* TABS */
         .tabs-bar { display: flex; gap: 0; border-bottom: 1px solid rgba(255,255,255,0.08); padding: 0 60px; }
@@ -518,6 +730,13 @@ export default function Company() {
               🇺🇸 W-8BEN-E Guide
               <span className="tab-badge tab-badge-us">US Networks</span>
             </button>
+            <button
+              className={`tab-btn${activeTab === "checklist" ? " tab-active" : ""}`}
+              onClick={() => setActiveTab("checklist")}
+            >
+              ✅ Network Checklist
+              <span className="tab-badge" style={{background:"rgba(74,222,128,0.15)",color:"#4ade80"}}>6 Networks</span>
+            </button>
           </div>
 
           {/* TAB CONTENT */}
@@ -533,6 +752,23 @@ export default function Company() {
                   </div>
                 </div>
                 {sections.map((s) => <Section key={s.id} section={s} />)}
+              </>
+            )}
+
+            {/* ── NETWORK CHECKLIST TAB ── */}
+            {activeTab === "checklist" && (
+              <>
+                <div className="instructions">
+                  <div className="instructions-icon">✅</div>
+                  <div className="instructions-text">
+                    <strong>How to use:</strong> Expand each network to see exactly what you need before applying. Green = done, Yellow = still to do. Click the apply link to open the registration page.
+                  </div>
+                </div>
+                <div className="checklist-legend">
+                  <div className="legend-item"><div className="legend-dot" style={{background:"#4ade80"}} />Done — ready</div>
+                  <div className="legend-item"><div className="legend-dot" style={{background:"#fbbf24"}} />To Do — action needed</div>
+                </div>
+                {networks.map((net) => <NetworkCard key={net.id} net={net} />)}
               </>
             )}
 

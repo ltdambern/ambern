@@ -7,6 +7,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "@/pages/Home";
 import Company from "@/pages/Company";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
+import CaseStudies from "@/pages/CaseStudies";
 
 
 function Router() {
@@ -15,6 +16,7 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/company"} component={Company} />
       <Route path={"/privacy-policy"} component={PrivacyPolicy} />
+      <Route path={"/case-studies"} component={CaseStudies} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
