@@ -12,11 +12,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
     <meta name="description" content="Ambern Ltd is an international digital marketing agency headquartered in London, specialising in performance-based affiliate marketing across finance, cybersecurity, SaaS and insurance verticals in Tier-1 global markets." />
     <meta name="keywords" content="affiliate marketing, digital marketing agency London, performance marketing, paid media, Facebook Ads, Google Ads" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <!-- Open Graph -->
+    <meta property="og:title" content="Ambern Ltd — International Digital Marketing Agency" />
+    <meta property="og:description" content="Performance-based affiliate marketing across finance, cybersecurity, SaaS and insurance verticals in Tier-1 global markets." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_GB" />
   </head>
 
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script
+      defer
+      src="%VITE_ANALYTICS_ENDPOINT%/umami"
+      data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
   </body>
 
 </html>

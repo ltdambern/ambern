@@ -538,7 +538,7 @@ export default function Home() {
                 <div className="contact-icon">📧</div>
                 <div>
                   <div className="contact-item-title">Email</div>
-                  <div className="contact-item-value">partnerships@ambernltd.com</div>
+                  <div className="contact-item-value">partnerships@ambern.uk</div>
                 </div>
               </div>
               <div className="contact-item">
