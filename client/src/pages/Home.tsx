@@ -171,8 +171,38 @@ export default function Home() {
 
         /* HERO */
         .hero { min-height: 100vh; position: relative; display: flex; align-items: center; overflow: hidden; }
-        .hero-bg { position: absolute; inset: 0; background-image: url(${HERO_BG}); background-size: cover; background-position: center; }
+        .hero-bg { position: absolute; inset: 0; background-image: url(${HERO_BG}); background-size: 120%; background-position: center; animation: kenBurns 20s ease-in-out infinite alternate; }
+        @keyframes kenBurns {
+          0%   { background-size: 110%; background-position: 55% 45%; }
+          50%  { background-size: 125%; background-position: 45% 55%; }
+          100% { background-size: 115%; background-position: 50% 48%; }
+        }
         .hero-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.5) 50%, rgba(10,10,10,0.7) 100%); }
+        /* Floating particles */
+        .hero-particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
+        .particle { position: absolute; border-radius: 50%; background: rgba(232,101,10,0.6); animation: floatParticle linear infinite; }
+        .particle:nth-child(1)  { width:3px; height:3px; left:10%; top:20%; animation-duration:12s; animation-delay:0s; }
+        .particle:nth-child(2)  { width:2px; height:2px; left:25%; top:60%; animation-duration:18s; animation-delay:2s; }
+        .particle:nth-child(3)  { width:4px; height:4px; left:40%; top:30%; animation-duration:15s; animation-delay:4s; }
+        .particle:nth-child(4)  { width:2px; height:2px; left:60%; top:70%; animation-duration:20s; animation-delay:1s; }
+        .particle:nth-child(5)  { width:3px; height:3px; left:75%; top:25%; animation-duration:14s; animation-delay:3s; }
+        .particle:nth-child(6)  { width:2px; height:2px; left:85%; top:50%; animation-duration:16s; animation-delay:5s; }
+        .particle:nth-child(7)  { width:4px; height:4px; left:15%; top:80%; animation-duration:22s; animation-delay:0.5s; }
+        .particle:nth-child(8)  { width:2px; height:2px; left:50%; top:15%; animation-duration:13s; animation-delay:6s; }
+        .particle:nth-child(9)  { width:3px; height:3px; left:90%; top:40%; animation-duration:17s; animation-delay:2.5s; }
+        .particle:nth-child(10) { width:2px; height:2px; left:35%; top:90%; animation-duration:19s; animation-delay:1.5s; }
+        @keyframes floatParticle {
+          0%   { transform: translateY(0px) translateX(0px); opacity: 0; }
+          10%  { opacity: 1; }
+          90%  { opacity: 0.6; }
+          100% { transform: translateY(-120px) translateX(30px); opacity: 0; }
+        }
+        /* Hero content entrance animation */
+        .hero-content { animation: heroEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes heroEntrance {
+          from { opacity: 0; transform: translateY(40px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
         .hero-content { position: relative; z-index: 2; padding: 0 60px; max-width: 780px; }
         .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(232,101,10,0.15); border: 1px solid rgba(232,101,10,0.4); padding: 6px 16px; border-radius: 100px; font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #E8650A; margin-bottom: 28px; }
         .hero-badge::before { content: ''; width: 6px; height: 6px; background: #E8650A; border-radius: 50%; animation: pulse 2s infinite; }
@@ -347,6 +377,9 @@ export default function Home() {
       <section className="hero">
         <div className="hero-bg" />
         <div className="hero-overlay" />
+        <div className="hero-particles">
+          {[...Array(10)].map((_, i) => <div key={i} className="particle" />)}
+        </div>
         <div className="hero-content">
           <div className="hero-badge">London, United Kingdom · Est. 2024</div>
           <h1>
@@ -557,8 +590,10 @@ export default function Home() {
               International digital marketing agency headquartered in London, specialising in performance-based affiliate marketing across Tier-1 global markets.
             </p>
             <p className="footer-reg">
-              Ambern Ltd · Registered in England & Wales<br />
-              London, United Kingdom
+              Ambern Ltd · Company No. 16622550<br />
+              Registered in England & Wales<br />
+              71-75 Shelton Street, Covent Garden<br />
+              London, WC2H 9JQ, United Kingdom
             </p>
           </div>
           <div>
