@@ -56,11 +56,12 @@ const services = [
   },
 ];
 
+// Stats with numeric targets for count-up animation
 const stats = [
-  { value: "£2.4M+", label: "Revenue Generated for Partners" },
-  { value: "14", label: "Countries Reached" },
-  { value: "60+", label: "Affiliate Programmes Active" },
-  { value: "340%", label: "Average ROAS for Clients" },
+  { prefix: "£", target: 2.4, suffix: "M+", decimals: 1, label: "Revenue Generated for Partners" },
+  { prefix: "",  target: 14,  suffix: "",   decimals: 0, label: "Countries Reached" },
+  { prefix: "",  target: 60,  suffix: "+",  decimals: 0, label: "Affiliate Programmes Active" },
+  { prefix: "",  target: 340, suffix: "%",  decimals: 0, label: "Average ROAS for Clients" },
 ];
 
 const networks = [
@@ -91,23 +92,26 @@ const faqs = [
   },
 ];
 
-function useCountUp(target: number, duration: number, start: boolean) {
+function useCountUp(target: number, duration: number, decimals: number, start: boolean) {
   const [count, setCount] = useState(0);
   useEffect(() => {
     if (!start) return;
     let startTime: number | null = null;
+    const multiplier = Math.pow(10, decimals);
     const step = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
-      setCount(Math.floor(progress * target));
+      // Ease-out cubic for a satisfying deceleration
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.round(eased * target * multiplier) / multiplier);
       if (progress < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
-  }, [target, duration, start]);
+  }, [target, duration, decimals, start]);
   return count;
 }
 
-function StatCard({ value, label }: { value: string; label: string }) {
+function StatCard({ prefix, target, suffix, decimals, label }: { prefix: string; target: number; suffix: string; decimals: number; label: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -115,12 +119,21 @@ function StatCard({ value, label }: { value: string; label: string }) {
     if (ref.current) obs.observe(ref.current);
     return () => obs.disconnect();
   }, []);
+  const count = useCountUp(target, 2000, decimals, visible);
+  const displayValue = decimals > 0 ? count.toFixed(decimals) : count.toString();
   return (
     <div ref={ref} className="stat-card">
-      <div className="stat-value" style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)", transition: "all 0.6s ease" }}>
-        {value}
+      <div
+        className="stat-value"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "translateY(0) scale(1)" : "translateY(24px) scale(0.92)",
+          transition: "opacity 0.5s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1)",
+        }}
+      >
+        {prefix}{displayValue}{suffix}
       </div>
-      <div className="stat-label">{label}</div>
+      <div className="stat-label" style={{ opacity: visible ? 1 : 0, transition: "opacity 0.5s ease 0.2s" }}>{label}</div>
     </div>
   );
 }
@@ -505,7 +518,7 @@ export default function Home() {
           <div className="section-label">Our Track Record</div>
           <h2 className="section-title">Results That Speak for Themselves</h2>
           <div className="stats-grid">
-            {stats.map((s) => <StatCard key={s.label} value={s.value} label={s.label} />)}
+            {stats.map((s) => <StatCard key={s.label} prefix={s.prefix} target={s.target} suffix={s.suffix} decimals={s.decimals} label={s.label} />)}
           </div>
         </div>
       </section>
