@@ -6,7 +6,10 @@
  * Layout: Full-width sections, asymmetric, cinematic
  */
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, FormEvent } from "react";
+
+// Formspree endpoint — delivers to ltdambern@gmail.com
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xpwzgvqe";
 
 const LOGO_V1 = "https://d2xsxph8kpxj0f.cloudfront.net/310519663400200484/j3swkrTrMmDAtC9ABvjL9m/ambern_logo_v1_d51e72ba.png";
 const HERO_BG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663400200484/j3swkrTrMmDAtC9ABvjL9m/hero_bg-Rw8TVnNcGQccFWRSBnyLoR.webp";
@@ -139,6 +142,29 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setFormStatus("sending");
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" },
+      });
+      if (res.ok) {
+        setFormStatus("success");
+        form.reset();
+      } else {
+        setFormStatus("error");
+      }
+    } catch {
+      setFormStatus("error");
+    }
+  }
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -550,30 +576,42 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
+          <form className="contact-form" onSubmit={handleSubmit}>
             <div className="form-row">
               <div className="form-field">
                 <label className="form-label">First Name</label>
-                <input className="form-input" type="text" placeholder="John" />
+                <input className="form-input" type="text" name="firstName" placeholder="John" required />
               </div>
               <div className="form-field">
                 <label className="form-label">Last Name</label>
-                <input className="form-input" type="text" placeholder="Smith" />
+                <input className="form-input" type="text" name="lastName" placeholder="Smith" required />
               </div>
             </div>
             <div className="form-field">
               <label className="form-label">Company / Network</label>
-              <input className="form-input" type="text" placeholder="e.g. ShareASale, NordVPN, etc." />
+              <input className="form-input" type="text" name="company" placeholder="e.g. ShareASale, NordVPN, etc." />
             </div>
             <div className="form-field">
               <label className="form-label">Email Address</label>
-              <input className="form-input" type="email" placeholder="john@company.com" />
+              <input className="form-input" type="email" name="email" placeholder="john@company.com" required />
             </div>
             <div className="form-field">
               <label className="form-label">Message</label>
-              <textarea className="form-textarea" placeholder="Tell us about your programme or enquiry..." />
+              <textarea className="form-textarea" name="message" placeholder="Tell us about your programme or enquiry..." required />
             </div>
-            <button className="form-submit" type="submit">Send Message →</button>
+            {formStatus === "success" && (
+              <div style={{ background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.35)", borderRadius: "6px", padding: "16px 20px", color: "#4ade80", fontSize: "14px", fontWeight: 500 }}>
+                ✅ Message sent! We'll get back to you within 24 hours.
+              </div>
+            )}
+            {formStatus === "error" && (
+              <div style={{ background: "rgba(239,68,68,0.12)", border: "1px solid rgba(239,68,68,0.35)", borderRadius: "6px", padding: "16px 20px", color: "#f87171", fontSize: "14px", fontWeight: 500 }}>
+                ❌ Something went wrong. Please email us directly at partnerships@ambern.uk
+              </div>
+            )}
+            <button className="form-submit" type="submit" disabled={formStatus === "sending" || formStatus === "success"} style={{ opacity: formStatus === "sending" ? 0.7 : 1 }}>
+              {formStatus === "sending" ? "Sending..." : "Send Message →"}
+            </button>
           </form>
         </div>
       </section>
