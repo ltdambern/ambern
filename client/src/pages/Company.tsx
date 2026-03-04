@@ -1,55 +1,221 @@
 /*
- * AMBERN LTD — Company / About Page
+ * AMBERN LTD — Company / Affiliate Registration Kit
  * Design Philosophy: Dark Intelligence / Corporate Power
  * Colors: #0A0A0A (bg), #E8650A (orange accent), #FFFFFF (text), #1A1A1A (cards)
  * Typography: Space Grotesk (headings) + Inter (body)
- * Data source: Companies House UK — Company No. 16622550
+ * Purpose: Quick-copy panel for filling affiliate network application forms
  */
 
+import { useState } from "react";
 import { Link } from "wouter";
 
 const LOGO_V1 = "https://d2xsxph8kpxj0f.cloudfront.net/310519663400200484/j3swkrTrMmDAtC9ABvjL9m/ambern_logo_v1_d51e72ba.png";
-const LONDON_OFFICE = "https://d2xsxph8kpxj0f.cloudfront.net/310519663400200484/j3swkrTrMmDAtC9ABvjL9m/london_office-6R5FRFnvMdYvxFUaatfByn.webp";
 
-const companyData = {
-  name: "AMBERN LTD",
-  number: "16622550",
-  status: "Active",
-  type: "Private Limited Company",
-  incorporated: "1 August 2025",
-  registeredAddress: "71-75 Shelton Street, Covent Garden, London, United Kingdom, WC2H 9JQ",
-  jurisdiction: "England & Wales",
-  sic: "47910 — Retail sale via mail order houses or via Internet",
-  confirmationDue: "14 August 2026",
-  accountsDue: "1 May 2027",
-  companiesHouseUrl: "https://find-and-update.company-information.service.gov.uk/company/16622550",
-};
-
-const directors = [
+// ─── All data you'll ever need for affiliate applications ───────────────────
+const sections = [
   {
-    name: "Vinicius Fernandes",
-    role: "Director & Company Secretary",
-    nationality: "Brazilian",
-    appointedOn: "1 August 2025",
-    address: "71-75 Shelton Street, Covent Garden, London, United Kingdom, WC2H 9JQ",
+    id: "company",
+    icon: "🏢",
+    title: "Company Details",
+    description: "Core registration info — used in every application form",
+    fields: [
+      { label: "Legal Company Name", value: "Ambern Ltd" },
+      { label: "Trading Name", value: "Ambern" },
+      { label: "Company Number (UK)", value: "16622550" },
+      { label: "Company Type", value: "Private Limited Company" },
+      { label: "Incorporation Date", value: "1 August 2025" },
+      { label: "Jurisdiction", value: "England and Wales" },
+      { label: "Country of Registration", value: "United Kingdom" },
+      { label: "VAT Number", value: "Not yet registered (below threshold)" },
+      { label: "Industry / SIC Code", value: "47910 — Retail sale via mail order houses or via Internet" },
+    ],
   },
   {
-    name: "Eduardo Nunes Angelus",
-    role: "Director & Company Secretary",
-    nationality: "Brazilian",
-    appointedOn: "1 August 2025",
-    address: "Rio Grande do Sul, Brazil",
+    id: "address",
+    icon: "📍",
+    title: "Registered Address",
+    description: "Official address as filed with Companies House",
+    fields: [
+      { label: "Full Registered Address", value: "71-75 Shelton Street, Covent Garden, London, WC2H 9JQ, United Kingdom" },
+      { label: "Address Line 1", value: "71-75 Shelton Street" },
+      { label: "Address Line 2", value: "Covent Garden" },
+      { label: "City", value: "London" },
+      { label: "County / State", value: "Greater London" },
+      { label: "Postcode / ZIP", value: "WC2H 9JQ" },
+      { label: "Country", value: "United Kingdom" },
+    ],
+  },
+  {
+    id: "contact",
+    icon: "📧",
+    title: "Contact & Website",
+    description: "Business contact details for affiliate applications",
+    fields: [
+      { label: "Business Email", value: "partnerships@ambern.uk" },
+      { label: "Website URL", value: "https://ambern.uk" },
+      { label: "Skype / Telegram", value: "partnerships@ambern.uk" },
+    ],
+  },
+  {
+    id: "director",
+    icon: "👤",
+    title: "Primary Director",
+    description: "Director details — required by some networks (MaxBounty, Impact)",
+    fields: [
+      { label: "Full Name", value: "Vinicius Fernandes" },
+      { label: "Role / Title", value: "Director" },
+      { label: "Nationality", value: "Brazilian" },
+      { label: "Country of Residence", value: "Brazil" },
+      { label: "Appointed On", value: "1 August 2025" },
+    ],
+  },
+  {
+    id: "traffic",
+    icon: "📣",
+    title: "Traffic & Marketing Methods",
+    description: "How you describe your traffic sources in applications",
+    fields: [
+      { label: "Primary Traffic Source", value: "Paid Search (Google Ads)" },
+      { label: "Secondary Traffic Source", value: "Paid Social (Facebook / Meta Ads)" },
+      { label: "Traffic Geographies", value: "United States, United Kingdom, Canada, Australia" },
+      { label: "Monthly Ad Spend (approx.)", value: "$2,000 – $10,000 USD" },
+      { label: "Promotion Method (short)", value: "PPC — Google Ads and Facebook Ads targeting Tier-1 English-speaking markets" },
+      {
+        label: "Promotion Method (full)",
+        value:
+          "Ambern Ltd runs performance-based paid media campaigns on Google Search, Google Display, and Meta (Facebook/Instagram) targeting English-speaking audiences in the US, UK, Canada and Australia. We use conversion-optimised landing pages, retargeting funnels, and audience segmentation to deliver qualified leads to affiliate programmes in the finance, cybersecurity, and SaaS verticals.",
+      },
+    ],
+  },
+  {
+    id: "niches",
+    icon: "🎯",
+    title: "Niches & Verticals",
+    description: "Your target verticals — select the relevant one per application",
+    fields: [
+      { label: "Primary Niche", value: "Financial Services — Gold IRA / Precious Metals" },
+      { label: "Secondary Niche", value: "Cybersecurity — VPN / Digital Privacy" },
+      { label: "Tertiary Niche", value: "SaaS — Business Software & Productivity" },
+      { label: "Additional Niche", value: "Insurance — Life & Health" },
+      { label: "Target Audience", value: "Adults 35–65, US/UK/CA/AU, interested in wealth protection and financial security" },
+    ],
+  },
+  {
+    id: "banking",
+    icon: "🏦",
+    title: "Payment Details",
+    description: "How you receive commissions — fill in when you have your account",
+    fields: [
+      { label: "Payment Method Preference", value: "Bank Transfer (ACH / SWIFT) or PayPal" },
+      { label: "Payment Currency", value: "USD or GBP" },
+      { label: "Bank Account Country", value: "United Kingdom" },
+      { label: "Minimum Payout Threshold", value: "$50 USD (or as set by network)" },
+      { label: "Tax Form (US networks)", value: "W-8BEN-E (foreign company)" },
+    ],
+  },
+  {
+    id: "social",
+    icon: "🌐",
+    title: "Social & Compliance",
+    description: "Links and compliance statements for network applications",
+    fields: [
+      { label: "Privacy Policy URL", value: "https://ambern.uk/privacy-policy" },
+      { label: "Companies House Listing", value: "https://find-and-update.company-information.service.gov.uk/company/16622550" },
+      { label: "Compliance Statement", value: "Ambern Ltd complies with UK GDPR, the UK Advertising Standards Authority (ASA) guidelines, and all applicable FTC disclosure requirements for affiliate marketing in the United States." },
+      { label: "No Incentivised Traffic", value: "Confirmed — we do not use incentivised, toolbar, or coupon traffic" },
+      { label: "No Brand Bidding (unless permitted)", value: "Confirmed — we respect brand bidding restrictions set by each programme" },
+    ],
   },
 ];
 
-const milestones = [
-  { year: "Aug 2025", event: "Ambern Ltd incorporated in England & Wales", icon: "🏢" },
-  { year: "Q4 2025", event: "First affiliate programme partnerships established", icon: "🤝" },
-  { year: "Q1 2026", event: "Tier-1 network access secured (ShareASale, Awin, CJ Affiliate)", icon: "🌐" },
-  { year: "Q2 2026", event: "Expansion into US finance and cybersecurity verticals", icon: "📈" },
-  { year: "Q3 2026", event: "Target: 60+ active affiliate programmes across 14 countries", icon: "🎯" },
-];
+// ─── Copy-to-clipboard field component ─────────────────────────────────────
+function CopyField({ label, value }: { label: string; value: string }) {
+  const [copied, setCopied] = useState(false);
 
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // fallback
+      const el = document.createElement("textarea");
+      el.value = value;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand("copy");
+      document.body.removeChild(el);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const isLong = value.length > 80;
+
+  return (
+    <div className="copy-field">
+      <div className="copy-field-label">{label}</div>
+      <div className={`copy-field-row${isLong ? " copy-field-row--tall" : ""}`}>
+        <div className="copy-field-value">{value}</div>
+        <button
+          className={`copy-btn${copied ? " copy-btn--done" : ""}`}
+          onClick={handleCopy}
+          title="Copy to clipboard"
+        >
+          {copied ? (
+            <>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              Copied!
+            </>
+          ) : (
+            <>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+              </svg>
+              Copy
+            </>
+          )}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Section component ──────────────────────────────────────────────────────
+function Section({ section }: { section: typeof sections[0] }) {
+  const [open, setOpen] = useState(true);
+
+  return (
+    <div className="kit-section">
+      <button className="kit-section-header" onClick={() => setOpen(!open)}>
+        <div className="kit-section-header-left">
+          <span className="kit-section-icon">{section.icon}</span>
+          <div>
+            <div className="kit-section-title">{section.title}</div>
+            <div className="kit-section-desc">{section.description}</div>
+          </div>
+        </div>
+        <div className={`kit-section-chevron${open ? " kit-section-chevron--open" : ""}`}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </div>
+      </button>
+      {open && (
+        <div className="kit-section-body">
+          {section.fields.map((f) => (
+            <CopyField key={f.label} label={f.label} value={f.value} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Page ───────────────────────────────────────────────────────────────────
 export default function Company() {
   return (
     <div className="ambern-root">
@@ -57,7 +223,7 @@ export default function Company() {
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        .ambern-root { background: #0A0A0A; color: #FFFFFF; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .ambern-root { background: #0A0A0A; color: #FFFFFF; font-family: 'Inter', sans-serif; overflow-x: hidden; min-height: 100vh; }
 
         /* NAV */
         .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 60px; display: flex; align-items: center; justify-content: space-between; background: rgba(10,10,10,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(232,101,10,0.2); }
@@ -71,65 +237,53 @@ export default function Company() {
         .nav-cta:hover { background: #ff7a1f; transform: translateY(-1px); }
 
         /* PAGE HERO */
-        .page-hero { padding: 160px 60px 80px; background: linear-gradient(180deg, #111 0%, #0A0A0A 100%); border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .page-hero { padding: 140px 60px 60px; background: linear-gradient(180deg, #111 0%, #0A0A0A 100%); border-bottom: 1px solid rgba(255,255,255,0.06); }
         .page-hero-breadcrumb { font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #E8650A; margin-bottom: 20px; }
         .page-hero-breadcrumb a { color: rgba(255,255,255,0.4); text-decoration: none; }
         .page-hero-breadcrumb a:hover { color: #E8650A; }
-        .page-hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(36px, 5vw, 64px); font-weight: 800; letter-spacing: -2px; line-height: 1.1; margin-bottom: 20px; }
+        .page-hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(32px, 4vw, 52px); font-weight: 800; letter-spacing: -2px; line-height: 1.1; margin-bottom: 16px; }
         .page-hero h1 span { color: #E8650A; }
-        .page-hero-sub { font-size: 18px; color: rgba(255,255,255,0.6); max-width: 600px; line-height: 1.7; }
+        .page-hero-sub { font-size: 16px; color: rgba(255,255,255,0.55); max-width: 640px; line-height: 1.7; margin-bottom: 32px; }
+
+        /* INSTRUCTIONS BANNER */
+        .instructions { background: rgba(232,101,10,0.08); border: 1px solid rgba(232,101,10,0.25); border-radius: 8px; padding: 20px 28px; display: flex; gap: 16px; align-items: flex-start; max-width: 860px; }
+        .instructions-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+        .instructions-text { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.6; }
+        .instructions-text strong { color: #E8650A; }
+
+        /* MAIN LAYOUT */
+        .kit-main { max-width: 900px; margin: 0 auto; padding: 60px; }
 
         /* SECTION */
-        .cp-section { padding: 80px 60px; border-bottom: 1px solid rgba(255,255,255,0.06); }
-        .cp-section:last-child { border-bottom: none; }
-        .section-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #E8650A; margin-bottom: 12px; }
-        .section-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(24px, 3vw, 36px); font-weight: 700; letter-spacing: -1px; margin-bottom: 40px; }
+        .kit-section { background: #111; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; margin-bottom: 16px; overflow: hidden; }
+        .kit-section-header { width: 100%; background: none; border: none; cursor: pointer; padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; text-align: left; transition: background 0.2s; }
+        .kit-section-header:hover { background: rgba(255,255,255,0.03); }
+        .kit-section-header-left { display: flex; align-items: center; gap: 16px; }
+        .kit-section-icon { font-size: 24px; width: 44px; height: 44px; background: rgba(232,101,10,0.12); border: 1px solid rgba(232,101,10,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .kit-section-title { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+        .kit-section-desc { font-size: 13px; color: rgba(255,255,255,0.4); }
+        .kit-section-chevron { color: rgba(255,255,255,0.4); transition: transform 0.25s; flex-shrink: 0; }
+        .kit-section-chevron--open { transform: rotate(180deg); color: #E8650A; }
 
-        /* COMPANY REGISTRATION CARD */
-        .reg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; overflow: hidden; }
-        .reg-row { display: contents; }
-        .reg-label { background: #111; padding: 18px 24px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.4); border-bottom: 1px solid rgba(255,255,255,0.06); }
-        .reg-value { background: #0A0A0A; padding: 18px 24px; font-size: 14px; font-weight: 500; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.06); border-left: 1px solid rgba(255,255,255,0.06); }
-        .reg-value.highlight { color: #E8650A; font-weight: 700; }
-        .reg-value.active { color: #4ade80; font-weight: 700; }
-        .reg-value a { color: #E8650A; text-decoration: none; }
-        .reg-value a:hover { text-decoration: underline; }
+        /* SECTION BODY */
+        .kit-section-body { padding: 0 28px 24px; display: flex; flex-direction: column; gap: 12px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 20px; }
 
-        /* DIRECTORS */
-        .directors-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; }
-        .director-card { background: #111; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 32px; position: relative; overflow: hidden; }
-        .director-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: #E8650A; }
-        .director-avatar { width: 56px; height: 56px; background: rgba(232,101,10,0.15); border: 1px solid rgba(232,101,10,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 20px; }
-        .director-name { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 6px; }
-        .director-role { font-size: 13px; font-weight: 600; color: #E8650A; letter-spacing: 0.5px; margin-bottom: 20px; }
-        .director-details { display: flex; flex-direction: column; gap: 10px; }
-        .director-detail { display: flex; gap: 12px; font-size: 13px; color: rgba(255,255,255,0.6); }
-        .director-detail-label { color: rgba(255,255,255,0.3); min-width: 90px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding-top: 2px; }
-
-        /* TIMELINE */
-        .timeline { position: relative; padding-left: 40px; }
-        .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 1px; background: rgba(232,101,10,0.3); }
-        .timeline-item { position: relative; margin-bottom: 40px; }
-        .timeline-item::before { content: ''; position: absolute; left: -36px; top: 6px; width: 12px; height: 12px; background: #E8650A; border-radius: 50%; box-shadow: 0 0 12px rgba(232,101,10,0.5); }
-        .timeline-year { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #E8650A; margin-bottom: 6px; }
-        .timeline-event { font-size: 16px; font-weight: 500; color: rgba(255,255,255,0.85); display: flex; align-items: center; gap: 10px; }
-
-        /* ABOUT LAYOUT */
-        .about-company { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-        .about-company-image { position: relative; border-radius: 8px; overflow: hidden; }
-        .about-company-image img { width: 100%; height: 400px; object-fit: cover; display: block; }
-        .about-company-image-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(10,10,10,0.3), rgba(232,101,10,0.1)); }
-        .ch-badge { position: absolute; bottom: 20px; left: 20px; background: rgba(10,10,10,0.9); border: 1px solid rgba(232,101,10,0.4); border-radius: 6px; padding: 12px 16px; }
-        .ch-badge-title { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; color: #E8650A; }
-        .ch-badge-sub { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
-        .about-company-text p { font-size: 16px; color: rgba(255,255,255,0.7); line-height: 1.8; margin-bottom: 20px; }
-        .about-company-text p:last-child { margin-bottom: 0; }
+        /* COPY FIELD */
+        .copy-field { background: #0A0A0A; border: 1px solid rgba(255,255,255,0.07); border-radius: 6px; padding: 14px 16px; transition: border-color 0.2s; }
+        .copy-field:hover { border-color: rgba(232,101,10,0.3); }
+        .copy-field-label { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 8px; }
+        .copy-field-row { display: flex; align-items: center; gap: 12px; }
+        .copy-field-row--tall { align-items: flex-start; }
+        .copy-field-value { font-size: 14px; font-weight: 500; color: #fff; flex: 1; line-height: 1.5; word-break: break-word; }
+        .copy-btn { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 5px; color: rgba(255,255,255,0.6); font-size: 12px; font-weight: 600; padding: 7px 12px; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+        .copy-btn:hover { background: rgba(232,101,10,0.15); border-color: rgba(232,101,10,0.4); color: #E8650A; }
+        .copy-btn--done { background: rgba(74,222,128,0.12) !important; border-color: rgba(74,222,128,0.4) !important; color: #4ade80 !important; }
 
         /* FOOTER */
-        .footer { background: #050505; border-top: 1px solid rgba(255,255,255,0.06); padding: 60px; }
-        .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; gap: 16px; }
+        .footer { background: #050505; border-top: 1px solid rgba(255,255,255,0.06); padding: 40px 60px; }
+        .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
         .footer-copy { font-size: 13px; color: rgba(255,255,255,0.3); }
-        .footer-reg-detail { font-size: 12px; color: rgba(255,255,255,0.2); margin-top: 6px; }
+        .footer-reg-detail { font-size: 12px; color: rgba(255,255,255,0.2); margin-top: 4px; }
         .footer-legal { display: flex; gap: 24px; }
         .footer-legal a { font-size: 13px; color: rgba(255,255,255,0.3); text-decoration: none; }
         .footer-legal a:hover { color: #E8650A; }
@@ -138,12 +292,11 @@ export default function Company() {
         @media (max-width: 768px) {
           .nav { padding: 16px 24px; }
           .nav-links { display: none; }
-          .page-hero { padding: 120px 24px 60px; }
-          .cp-section { padding: 60px 24px; }
-          .reg-grid { grid-template-columns: 1fr; }
-          .reg-value { border-left: none; }
-          .about-company { grid-template-columns: 1fr; }
-          .footer { padding: 40px 24px; }
+          .page-hero { padding: 100px 24px 40px; }
+          .kit-main { padding: 32px 20px; }
+          .kit-section-header { padding: 18px 20px; }
+          .kit-section-body { padding: 0 20px 20px; padding-top: 16px; }
+          .footer { padding: 32px 24px; }
           .footer-bottom { flex-direction: column; align-items: flex-start; }
         }
       `}</style>
@@ -167,144 +320,41 @@ export default function Company() {
       {/* PAGE HERO */}
       <div className="page-hero">
         <div className="page-hero-breadcrumb">
-          <a href="/">Home</a> &nbsp;/&nbsp; Company Information
+          <a href="/">Home</a> &nbsp;/&nbsp; Affiliate Registration Kit
         </div>
-        <h1>Ambern Ltd —<br /><span>Official Company</span> Information</h1>
+        <h1>Affiliate Registration <span>Kit</span></h1>
         <p className="page-hero-sub">
-          Full corporate registration details as filed with Companies House, England & Wales. Verified and publicly available at company number <strong style={{color:"#E8650A"}}>16622550</strong>.
+          All Ambern Ltd data organised and ready to paste into affiliate network application forms.
+          Click <strong style={{color:"#E8650A"}}>Copy</strong> next to any field and paste it directly.
         </p>
+        <div className="instructions">
+          <div className="instructions-icon">💡</div>
+          <div className="instructions-text">
+            <strong>How to use:</strong> Open the affiliate network application in another tab.
+            Come back here, click <strong>Copy</strong> on the field you need, and paste it into the form.
+            Each section is collapsible — click the header to expand or collapse it.
+            Fields marked in <strong>orange</strong> are the most commonly required.
+          </div>
+        </div>
       </div>
 
-      {/* REGISTRATION DETAILS */}
-      <section className="cp-section">
-        <div className="section-label">Companies House Record</div>
-        <h2 className="section-title">Official Registration Details</h2>
-        <div className="reg-grid">
-          <div className="reg-label">Company Name</div>
-          <div className="reg-value highlight">{companyData.name}</div>
-
-          <div className="reg-label">Company Number</div>
-          <div className="reg-value highlight">{companyData.number}</div>
-
-          <div className="reg-label">Company Status</div>
-          <div className="reg-value active">✓ {companyData.status}</div>
-
-          <div className="reg-label">Company Type</div>
-          <div className="reg-value">{companyData.type}</div>
-
-          <div className="reg-label">Incorporated On</div>
-          <div className="reg-value">{companyData.incorporated}</div>
-
-          <div className="reg-label">Jurisdiction</div>
-          <div className="reg-value">{companyData.jurisdiction}</div>
-
-          <div className="reg-label">Registered Office</div>
-          <div className="reg-value">{companyData.registeredAddress}</div>
-
-          <div className="reg-label">Nature of Business (SIC)</div>
-          <div className="reg-value">{companyData.sic}</div>
-
-          <div className="reg-label">Confirmation Statement Due</div>
-          <div className="reg-value">{companyData.confirmationDue}</div>
-
-          <div className="reg-label">First Accounts Due</div>
-          <div className="reg-value">{companyData.accountsDue}</div>
-
-          <div className="reg-label">Companies House Record</div>
-          <div className="reg-value">
-            <a href={companyData.companiesHouseUrl} target="_blank" rel="noopener noreferrer">
-              View on Companies House ↗
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* DIRECTORS */}
-      <section className="cp-section">
-        <div className="section-label">Officers</div>
-        <h2 className="section-title">Directors & Company Secretaries</h2>
-        <div className="directors-grid">
-          {directors.map((d) => (
-            <div className="director-card" key={d.name}>
-              <div className="director-avatar">👤</div>
-              <div className="director-name">{d.name}</div>
-              <div className="director-role">{d.role}</div>
-              <div className="director-details">
-                <div className="director-detail">
-                  <span className="director-detail-label">Nationality</span>
-                  <span>{d.nationality}</span>
-                </div>
-                <div className="director-detail">
-                  <span className="director-detail-label">Appointed</span>
-                  <span>{d.appointedOn}</span>
-                </div>
-                <div className="director-detail">
-                  <span className="director-detail-label">Address</span>
-                  <span>{d.address}</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ABOUT THE COMPANY */}
-      <section className="cp-section">
-        <div className="section-label">Our Story</div>
-        <h2 className="section-title">About Ambern Ltd</h2>
-        <div className="about-company">
-          <div className="about-company-image">
-            <img src={LONDON_OFFICE} alt="Ambern Ltd — London, Covent Garden" />
-            <div className="about-company-image-overlay" />
-            <div className="ch-badge">
-              <div className="ch-badge-title">Covent Garden, London</div>
-              <div className="ch-badge-sub">71-75 Shelton Street · WC2H 9JQ</div>
-            </div>
-          </div>
-          <div className="about-company-text">
-            <p>
-              Ambern Ltd is a Private Limited Company incorporated in England and Wales on 1 August 2025, registered at 71-75 Shelton Street, Covent Garden, London — one of the most prestigious business addresses in the United Kingdom.
-            </p>
-            <p>
-              The company was founded by Vinicius Fernandes and Eduardo Nunes Angelus with a clear mandate: to build a world-class performance marketing operation that leverages the credibility of a UK-registered entity to access the highest-tier affiliate programmes and brand partnerships globally.
-            </p>
-            <p>
-              Registered under SIC code 47910 (Retail sale via mail order houses or via Internet), Ambern Ltd operates at the intersection of digital marketing, affiliate commerce and international media buying — specialising in paid traffic for finance, cybersecurity, SaaS and insurance verticals across Tier-1 English-speaking markets.
-            </p>
-            <p>
-              Our London registration is not merely a legal formality. It is our primary competitive advantage: it grants us access to Tier-1 affiliate networks, financial programmes and brand partnerships that are simply not available to operators without an established international corporate presence.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* TIMELINE */}
-      <section className="cp-section">
-        <div className="section-label">Company Journey</div>
-        <h2 className="section-title">Our Milestones</h2>
-        <div className="timeline">
-          {milestones.map((m) => (
-            <div className="timeline-item" key={m.year}>
-              <div className="timeline-year">{m.year}</div>
-              <div className="timeline-event"><span>{m.icon}</span> {m.event}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* KIT SECTIONS */}
+      <main className="kit-main">
+        {sections.map((section) => (
+          <Section key={section.id} section={section} />
+        ))}
+      </main>
 
       {/* FOOTER */}
       <footer className="footer">
         <div className="footer-bottom">
           <div>
-            <p className="footer-copy">© 2025 Ambern Ltd. All rights reserved.</p>
-            <p className="footer-reg-detail">
-              Registered in England & Wales · Company No. 16622550 · 71-75 Shelton Street, Covent Garden, London, WC2H 9JQ
-            </p>
+            <div className="footer-copy">© 2025 Ambern Ltd. All rights reserved.</div>
+            <div className="footer-reg-detail">Registered in England & Wales — Company No. 16622550 — 71-75 Shelton Street, Covent Garden, London, WC2H 9JQ</div>
           </div>
           <div className="footer-legal">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-            <a href="https://find-and-update.company-information.service.gov.uk/company/16622550" target="_blank" rel="noopener noreferrer">Companies House ↗</a>
+            <Link href="/privacy-policy">Privacy Policy</Link>
+            <a href="https://find-and-update.company-information.service.gov.uk/company/16622550" target="_blank" rel="noopener noreferrer">Companies House</a>
           </div>
         </div>
       </footer>
