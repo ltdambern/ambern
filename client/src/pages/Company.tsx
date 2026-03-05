@@ -679,7 +679,7 @@ export default function Company() {
 
         /* GATE */
         .gate-overlay { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0A0A0A; padding: 40px 24px; overflow-y: auto; }
-        .gate-card { background: #111; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 48px 44px 44px; width: 100%; max-width: 380px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+        .gate-card { background: #111; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 48px 44px 44px; width: 100%; max-width: 440px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
         .gate-logo { width: 56px; height: 56px; object-fit: contain; margin-bottom: 20px; }
         .gate-title { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 6px; text-align: center; }
         .gate-subtitle { font-size: 13px; color: rgba(255,255,255,0.4); margin-bottom: 32px; text-align: center; }
@@ -688,8 +688,8 @@ export default function Company() {
         .gate-dot--filled { background: #E8650A; border-color: #E8650A; box-shadow: 0 0 10px rgba(232,101,10,0.5); }
         .gate-dot--error { border-color: #f87171 !important; background: #f87171 !important; }
         .gate-error { font-size: 13px; color: #f87171; margin-bottom: 16px; text-align: center; }
-        .gate-numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; margin-bottom: 28px; width: 100%; }
-        .gate-key { background: #1a1a1a; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: #fff; font-size: 22px; font-weight: 600; font-family: 'Space Grotesk', sans-serif; height: 72px; cursor: pointer; transition: all 0.15s; }
+        .gate-numpad { display: grid; grid-template-columns: repeat(3, 88px); gap: 16px; margin-top: 32px; margin-bottom: 28px; justify-content: center; }
+        .gate-key { background: #1a1a1a; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: #fff; font-size: 22px; font-weight: 600; font-family: 'Space Grotesk', sans-serif; width: 88px; height: 72px; cursor: pointer; transition: all 0.15s; }
         .gate-key:hover { background: rgba(232,101,10,0.15); border-color: rgba(232,101,10,0.4); color: #E8650A; }
         .gate-key:active { transform: scale(0.95); }
         .gate-key--del { font-size: 18px; color: rgba(255,255,255,0.5); }
@@ -814,7 +814,9 @@ export default function Company() {
           .kit-main { padding: 28px 20px 60px; }
           .footer { padding: 28px 20px; }
           .footer-bottom { flex-direction: column; align-items: flex-start; }
-          .gate-card { padding: 32px 20px; }
+          .gate-card { padding: 40px 24px 36px; max-width: 340px; }
+          .gate-numpad { grid-template-columns: repeat(3, 76px); gap: 12px; }
+          .gate-key { width: 76px; height: 64px; font-size: 20px; }
         }
       `}</style>
 
