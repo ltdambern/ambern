@@ -502,6 +502,26 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
   const handleDigit = (d: string) => { if (pin.length < 6) setPin((p) => p + d); };
   const handleDelete = () => setPin((p) => p.slice(0, -1));
 
+  // Physical keyboard support
+  React.useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (/^[0-9]$/.test(e.key)) handleDigit(e.key);
+      else if (e.key === 'Backspace') handleDelete();
+      else if (e.key === 'Enter') {
+        if (pin.length === 6) {
+          if (pin === ACCESS_PIN) onUnlock();
+          else {
+            setError(true); setShake(true); setPin("");
+            setTimeout(() => setShake(false), 600);
+            setTimeout(() => setError(false), 3000);
+          }
+        }
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [pin]);
+
   return (
     <div className="gate-overlay">
       <div className={`gate-card${shake ? " gate-shake" : ""}`}>
