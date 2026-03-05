@@ -678,8 +678,8 @@ export default function Company() {
         .ambern-root { background: #0A0A0A; color: #FFFFFF; font-family: 'Inter', sans-serif; overflow-x: hidden; min-height: 100vh; }
 
         /* GATE */
-        .gate-overlay { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0A0A0A; padding: 24px; }
-        .gate-card { background: #111; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 56px 48px 48px; width: 100%; max-width: 400px; display: flex; flex-direction: column; align-items: center; }
+        .gate-overlay { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0A0A0A; padding: 40px 24px; overflow-y: auto; }
+        .gate-card { background: #111; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 48px 44px 44px; width: 100%; max-width: 380px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
         .gate-logo { width: 56px; height: 56px; object-fit: contain; margin-bottom: 20px; }
         .gate-title { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 6px; text-align: center; }
         .gate-subtitle { font-size: 13px; color: rgba(255,255,255,0.4); margin-bottom: 32px; text-align: center; }
