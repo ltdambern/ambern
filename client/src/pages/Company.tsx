@@ -678,10 +678,101 @@ function BioGeneratorTab({ bioCopied, copyBio }: { bioCopied: string | null; cop
   );
 }
 
+// ─── Company Profile Tab ───────────────────────────────────────────────────
+const PROFILE_SECTIONS = [
+  {
+    title: "Registration Details",
+    fields: [
+      { label: "Company Name", value: "AMBERN LTD" },
+      { label: "Company Number", value: "16622550" },
+      { label: "Company Type", value: "Private Limited Company" },
+      { label: "Status", value: "Active" },
+      { label: "Incorporated On", value: "1st August 2025" },
+      { label: "Jurisdiction", value: "England and Wales" },
+    ],
+  },
+  {
+    title: "Registered Office",
+    fields: [
+      { label: "Address", value: "71-75 Shelton Street, Covent Garden, London, United Kingdom, WC2H 9JQ" },
+    ],
+  },
+  {
+    title: "Business Activity",
+    fields: [
+      { label: "SIC Code", value: "47910" },
+      { label: "Description", value: "Retail sale via mail order houses or via Internet" },
+    ],
+  },
+  {
+    title: "Compliance Deadlines",
+    fields: [
+      { label: "First Accounts Due", value: "1st May 2027 (made up to 31 August 2026)" },
+      { label: "Confirmation Statement", value: "Due by 14 August 2026 (first date: 31 July 2026)" },
+    ],
+  },
+  {
+    title: "Contact Information",
+    fields: [
+      { label: "Email", value: "ltdambern@gmail.com" },
+      { label: "Phone (Business)", value: "+55 53 98106 2741" },
+      { label: "Phone (Personal)", value: "+55 53 99180 7731" },
+    ],
+  },
+];
+
+function ProfileCopyField({ label, value }: { label: string; value: string }) {
+  const [copied, setCopied] = useState(false);
+  const copy = () => {
+    navigator.clipboard.writeText(value);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+  return (
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", borderBottom: "1px solid rgba(255,255,255,0.05)", gap: "12px" }}>
+      <div style={{ minWidth: 0 }}>
+        <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "3px" }}>{label}</div>
+        <div style={{ fontSize: "14px", color: "#fff", fontWeight: 500, wordBreak: "break-word" }}>{value}</div>
+      </div>
+      <button
+        onClick={copy}
+        style={{ flexShrink: 0, padding: "6px 14px", borderRadius: "6px", border: "none", cursor: "pointer", fontSize: "12px", fontWeight: 600, fontFamily: "'Space Grotesk', sans-serif", transition: "all 0.2s", background: copied ? "rgba(74,222,128,0.2)" : "rgba(232,101,10,0.15)", color: copied ? "#4ade80" : "#E8650A" }}
+      >
+        {copied ? "✓ Copied" : "Copy"}
+      </button>
+    </div>
+  );
+}
+
+function CompanyProfileTab() {
+  return (
+    <div>
+      <div className="instructions">
+        <div className="instructions-icon">🏛️</div>
+        <div className="instructions-text">
+          <strong>Company Profile:</strong> Official registration data from Companies House. Click <strong>Copy</strong> on any field to copy it instantly for use in affiliate platform registration forms.
+        </div>
+      </div>
+      {PROFILE_SECTIONS.map((sec) => (
+        <div key={sec.title} style={{ background: "#111", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "12px", marginBottom: "16px", overflow: "hidden" }}>
+          <div style={{ background: "rgba(232,101,10,0.12)", borderBottom: "1px solid rgba(232,101,10,0.2)", padding: "12px 16px", display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#E8650A", fontFamily: "'Space Grotesk', sans-serif" }}>{sec.title}</span>
+          </div>
+          {sec.fields.map((f) => <ProfileCopyField key={f.label} label={f.label} value={f.value} />)}
+        </div>
+      ))}
+      <div style={{ marginTop: "20px", padding: "16px", background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.2)", borderRadius: "10px", fontSize: "13px", color: "rgba(255,255,255,0.6)" }}>
+        <strong style={{ color: "#60a5fa" }}>📎 Source:</strong> Companies House — Company No. 16622550. Verify at{" "}
+        <a href="https://find-and-update.company-information.service.gov.uk/company/16622550" target="_blank" rel="noopener noreferrer" style={{ color: "#60a5fa", textDecoration: "underline" }}>find-and-update.company-information.service.gov.uk</a>
+      </div>
+    </div>
+  );
+}
+
 // ─── Main Page ──────────────────────────────────────────────────────────────
 export default function Company() {
   const [unlocked, setUnlocked] = useState(false);
-  const [activeTab, setActiveTab] = useState<"kit" | "w8" | "checklist" | "bio">("kit");
+  const [activeTab, setActiveTab] = useState<"kit" | "w8" | "checklist" | "bio" | "profile">("kit");
   const [bioCopied, setBioCopied] = useState<string | null>(null);
 
   const copyBio = (key: string, text: string) => {
@@ -902,6 +993,13 @@ export default function Company() {
               ✍️ Bio Generator
               <span className="tab-badge" style={{background:"rgba(168,85,247,0.15)",color:"#c084fc"}}>8 Platforms</span>
             </button>
+            <button
+              className={`tab-btn${activeTab === "profile" ? " tab-active" : ""}`}
+              onClick={() => setActiveTab("profile")}
+            >
+              🏛️ Company Profile
+              <span className="tab-badge" style={{background:"rgba(59,130,246,0.15)",color:"#60a5fa"}}>Official Docs</span>
+            </button>
           </div>
 
           {/* TAB CONTENT */}
@@ -941,6 +1039,9 @@ export default function Company() {
                 {networks.map((net) => <NetworkCard key={net.id} net={net} />)}
               </>
             )}
+
+            {/* ── COMPANY PROFILE TAB ── */}
+            {activeTab === "profile" && <CompanyProfileTab />}
 
             {/* ── W-8BEN-E TAB ── */}
             {activeTab === "w8" && (
