@@ -6,7 +6,7 @@
  * Tabs: Affiliate Kit | W-8BEN-E Guide | Network Checklist | Bio Generator
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 
 const LOGO_V1 = "https://d2xsxph8kpxj0f.cloudfront.net/310519663400200484/j3swkrTrMmDAtC9ABvjL9m/ambern_logo_v1_d51e72ba.png";
@@ -503,7 +503,7 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
   const handleDelete = () => setPin((p) => p.slice(0, -1));
 
   // Physical keyboard support
-  React.useEffect(() => {
+  useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (/^[0-9]$/.test(e.key)) handleDigit(e.key);
       else if (e.key === 'Backspace') handleDelete();
