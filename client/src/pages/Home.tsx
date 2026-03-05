@@ -685,6 +685,7 @@ export default function Home() {
             <a href="#">Privacy Policy</a>
             <a href="#">Terms of Service</a>
             <a href="#">Cookie Policy</a>
+            <a href="/company" style={{opacity:0.25,fontSize:"11px",letterSpacing:"0.5px"}}>&#9679;</a>
           </div>
         </div>
       </footer>
