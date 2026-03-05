@@ -3,7 +3,7 @@
  * Design Philosophy: Dark Intelligence / Corporate Power
  * Colors: #0A0A0A (bg), #E8650A (orange accent), #FFFFFF (text), #1A1A1A (cards)
  * Typography: Space Grotesk (headings) + Inter (body)
- * Tabs: Affiliate Kit | W-8BEN-E Guide | Network Checklist
+ * Tabs: Affiliate Kit | W-8BEN-E Guide | Network Checklist | Bio Generator
  */
 
 import { useState } from "react";
@@ -529,10 +529,146 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
   );
 }
 
+// ─── Bio Generator Tab ─────────────────────────────────────────────────────
+const BIO_DATA = [
+  {
+    key: "hotmart-long",
+    platform: "Hotmart — Long Bio",
+    icon: "🔥",
+    limit: "500+ characters required",
+    limitColor: "#f59e0b",
+    tone: "Professional & descriptive",
+    purpose: "Used in the Hotmart producer/affiliate profile page. Must be at least 500 characters or the form rejects it.",
+    bio: "Ambern Ltd is a UK-registered performance marketing agency headquartered in London, specialising in paid traffic and affiliate marketing across Tier-1 markets including the United States, United Kingdom, Canada and Australia.\n\nWe partner with premium affiliate programmes in the finance, cybersecurity, SaaS and insurance verticals, driving qualified leads and conversions through Google Search Ads, Facebook Ads and YouTube pre-roll campaigns.\n\nOur approach combines data-driven audience targeting, conversion-optimised landing pages and rigorous A/B testing to deliver consistent, measurable results for the programmes we promote. We are committed to transparent, compliant and ethical marketing practices across all channels and markets we operate in.",
+  },
+  {
+    key: "hotmart-short",
+    platform: "Hotmart — Short Description",
+    icon: "🔥",
+    limit: "~200 characters",
+    limitColor: "#f59e0b",
+    tone: "Concise & direct",
+    purpose: "Used in the shorter description field on Hotmart (some forms ask for a brief version). Keep it under 200 characters.",
+    bio: "UK performance marketing agency. We drive qualified traffic to affiliate programmes in finance, cybersecurity and SaaS across the US, UK and Canada via Google Ads and Facebook Ads.",
+  },
+  {
+    key: "twitter",
+    platform: "Twitter / X",
+    icon: "X",
+    limit: "160 characters max",
+    limitColor: "#60a5fa",
+    tone: "Punchy & keyword-rich",
+    purpose: "Twitter bio appears under your name on your profile. Maximum 160 characters. Should include what you do, where you are, and a link hook.",
+    bio: "UK-registered performance marketing agency. Driving qualified traffic to affiliate programmes in finance, cybersecurity & SaaS. London",
+  },
+  {
+    key: "linkedin",
+    platform: "LinkedIn — Company Page",
+    icon: "in",
+    limit: "~220 characters (tagline)",
+    limitColor: "#0ea5e9",
+    tone: "Corporate & credibility-focused",
+    purpose: "LinkedIn company page tagline (shown under the company name in search results). Keep it under 220 characters.",
+    bio: "Performance marketing agency | Paid traffic for affiliate programmes in finance, cybersecurity & SaaS | UK-registered | US, UK, CA, AU markets",
+  },
+  {
+    key: "maxbounty",
+    platform: "MaxBounty — Application",
+    icon: "MB",
+    limit: "No strict limit — be detailed",
+    limitColor: "#f59e0b",
+    tone: "Specific & traffic-focused",
+    purpose: "MaxBounty asks how you plan to promote offers. Be specific about traffic sources, verticals and monthly spend. Vague answers get rejected.",
+    bio: "We run Google Search Ads and Facebook Ads targeting US and UK adults aged 35-65 in the finance, insurance and cybersecurity verticals. Primary offers: Gold IRA, VPN subscriptions, life insurance and SaaS tools. Monthly ad spend: $2,000-$10,000 USD. We use dedicated landing pages with conversion tracking and A/B testing. All traffic is paid - no coupon, incentive or email traffic.",
+  },
+  {
+    key: "impact",
+    platform: "Impact.com — Publisher Profile",
+    icon: "IP",
+    limit: "~300 characters recommended",
+    limitColor: "#8b5cf6",
+    tone: "Data-driven & professional",
+    purpose: "Impact.com publisher profile description. Shown to advertisers when you apply to their programmes. Mention channels, markets and verticals clearly.",
+    bio: "UK-based performance marketing agency driving paid search and paid social traffic to affiliate programmes in finance, SaaS and cybersecurity. We operate in the US, UK, Canada and Australia using Google Ads and Facebook Ads. See our campaign results at ambern.uk/case-studies.",
+  },
+  {
+    key: "awin",
+    platform: "Awin — Publisher Profile",
+    icon: "AW",
+    limit: "~250 characters recommended",
+    limitColor: "#ec4899",
+    tone: "Clear & compliance-aware",
+    purpose: "Awin is stricter than other networks. They review your profile manually. Mention your traffic method, markets and that you comply with their policies.",
+    bio: "UK-registered performance marketing agency. We promote affiliate programmes via PPC (Google Ads and Facebook Ads) in the US, UK and CA markets. Finance, cybersecurity and SaaS verticals. Fully compliant with Awin publisher policies.",
+  },
+  {
+    key: "facebook",
+    platform: "Facebook Business Page",
+    icon: "fb",
+    limit: "255 characters (short description)",
+    limitColor: "#3b82f6",
+    tone: "Accessible & benefit-led",
+    purpose: "Facebook Page short description (shown under your page name in search). Maximum 255 characters.",
+    bio: "Ambern Ltd - UK performance marketing agency. We connect audiences with the best offers in finance, cybersecurity and SaaS. Based in London.",
+  },
+];
+
+function BioGeneratorTab({ bioCopied, copyBio }: { bioCopied: string | null; copyBio: (key: string, text: string) => void }) {
+  return (
+    <>
+      <div className="instructions">
+        <div className="instructions-icon">&#9998;</div>
+        <div className="instructions-text">
+          <strong>How to use:</strong> Each card shows a ready-to-paste bio for a specific platform. The <strong>PURPOSE</strong> label explains what the field is for and why it matters. Click <strong>Copy</strong> and paste directly into the form. Character count is shown at the bottom of each card.
+        </div>
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:16}}>
+        {BIO_DATA.map((b) => (
+          <div key={b.key} style={{background:"#111",border:"1px solid rgba(255,255,255,0.08)",borderRadius:10,overflow:"hidden"}}>
+            <div style={{padding:"18px 24px 14px",borderBottom:"1px solid rgba(255,255,255,0.06)",display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:10}}>
+              <div style={{display:"flex",alignItems:"center",gap:12}}>
+                <div style={{width:36,height:36,borderRadius:8,background:"rgba(255,255,255,0.06)",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Space Grotesk',sans-serif",fontWeight:700,fontSize:12,color:"#fff",flexShrink:0}}>{b.icon}</div>
+                <div>
+                  <div style={{fontFamily:"'Space Grotesk',sans-serif",fontWeight:700,fontSize:15,color:"#fff"}}>{b.platform}</div>
+                  <div style={{display:"flex",gap:10,marginTop:3,flexWrap:"wrap"}}>
+                    <span style={{fontSize:11,fontWeight:700,color:b.limitColor,background:b.limitColor+"22",padding:"2px 8px",borderRadius:20}}>{b.limit}</span>
+                    <span style={{fontSize:11,color:"rgba(255,255,255,0.35)"}}>{b.tone}</span>
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={() => copyBio(b.key, b.bio)}
+                style={{background: bioCopied === b.key ? "rgba(74,222,128,0.15)" : "rgba(232,101,10,0.12)",border:"1px solid "+(bioCopied === b.key ? "rgba(74,222,128,0.4)" : "rgba(232,101,10,0.3)"),color: bioCopied === b.key ? "#4ade80" : "#E8650A",padding:"8px 18px",borderRadius:6,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"'Inter',sans-serif",transition:"all 0.2s",letterSpacing:"0.3px",whiteSpace:"nowrap"}}
+              >
+                {bioCopied === b.key ? "Copied!" : "Copy"}
+              </button>
+            </div>
+            <div style={{padding:"12px 24px",background:"rgba(255,255,255,0.02)",borderBottom:"1px solid rgba(255,255,255,0.05)"}}>
+              <span style={{fontSize:11,fontWeight:700,letterSpacing:"1.5px",textTransform:"uppercase" as const,color:"rgba(255,255,255,0.3)",marginRight:8}}>PURPOSE</span>
+              <span style={{fontSize:12,color:"rgba(255,255,255,0.45)",lineHeight:1.5}}>{b.purpose}</span>
+            </div>
+            <div style={{padding:"16px 24px"}}>
+              <pre style={{fontFamily:"'Inter',sans-serif",fontSize:13,color:"rgba(255,255,255,0.75)",lineHeight:1.7,whiteSpace:"pre-wrap",margin:0}}>{b.bio}</pre>
+              <div style={{marginTop:10,fontSize:11,color:"rgba(255,255,255,0.25)"}}>{b.bio.length} characters</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
 // ─── Main Page ──────────────────────────────────────────────────────────────
 export default function Company() {
   const [unlocked, setUnlocked] = useState(false);
-  const [activeTab, setActiveTab] = useState<"kit" | "w8" | "checklist">("kit");
+  const [activeTab, setActiveTab] = useState<"kit" | "w8" | "checklist" | "bio">("kit");
+  const [bioCopied, setBioCopied] = useState<string | null>(null);
+
+  const copyBio = (key: string, text: string) => {
+    navigator.clipboard.writeText(text);
+    setBioCopied(key);
+    setTimeout(() => setBioCopied(null), 2000);
+  };
 
   return (
     <div className="ambern-root">
@@ -737,6 +873,13 @@ export default function Company() {
               ✅ Network Checklist
               <span className="tab-badge" style={{background:"rgba(74,222,128,0.15)",color:"#4ade80"}}>6 Networks</span>
             </button>
+            <button
+              className={`tab-btn${activeTab === "bio" ? " tab-active" : ""}`}
+              onClick={() => setActiveTab("bio")}
+            >
+              ✍️ Bio Generator
+              <span className="tab-badge" style={{background:"rgba(168,85,247,0.15)",color:"#c084fc"}}>8 Platforms</span>
+            </button>
           </div>
 
           {/* TAB CONTENT */}
@@ -754,6 +897,11 @@ export default function Company() {
                 {sections.map((s) => <Section key={s.id} section={s} />)}
               </>
             )}
+
+            {/* ── BIO GENERATOR TAB ── */}
+            {activeTab === "bio" && <BioGeneratorTab bioCopied={bioCopied} copyBio={copyBio} />}
+
+
 
             {/* ── NETWORK CHECKLIST TAB ── */}
             {activeTab === "checklist" && (
